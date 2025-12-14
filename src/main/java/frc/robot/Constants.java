@@ -18,6 +18,9 @@ public final class Constants {
     public static final int LEFT_BACK_ID =2;
     public static final int RIGHT_FRONT_ID =3;
     public static final int RIGHT_BACK_ID =4;
+
+    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 60;
+    public static final double DRIVE_MOTOR_VOLTAGE_COMP = 12;
   } 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;

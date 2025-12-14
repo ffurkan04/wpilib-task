@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
 
+
 import com.revrobotics.spark.*;
+import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -37,7 +39,26 @@ public class DriveSubsystem extends SubsystemBase {
         rightFront.setCANTimeout(250);
         rightBack.setCANTimeout(250);
         
-        
+        SparkMaxConfig config = new SparkMaxConfig(); //Motorlar için bir config oluşturuyoruz.
+        //Batarya sürüş esnasında tükenecek ve ilk baştaki aynı voltaj değerini veremeyecek 
+        //Bu da robotun sürüşünden bir süre sonra yavaşlamaya başlamasına neden olacak
+        //Bunun engellemek için voltageCompensation değerine gerekli olan değeri yazıyoruz. 
+        config.voltageCompensation(Constants.DriveConstants.DRIVE_MOTOR_VOLTAGE_COMP); 
+
+        //Eğer motorlar çok fazla akım çekmek isterlerse bu durum motorlara,kablolara ve roboRIO ya hasar verebilir 
+        //Bu yüzden bunu kısıtlayıp fazla olursa güc kesmek için ayarlıyoruz. 
+        config.smartCurrentLimit(Constants.DriveConstants.DRIVE_MOTOR_CURRENT_LIMIT);
+
+        config.follow(leftFront); //Motorların uyumlu olması için öndeki motor ile aynı özelleştirmeleri takip edilmesi söyleniyor
+        leftBack.configure(config, SparkBase.ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        config.follow(rightFront);
+        rightBack.configure(config, SparkBase.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        config.disableFollowerMode();
+        rightFront.configure(config, SparkBase.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        config.inverted(true); //sol taraf için config'i tersine uyguluyoruz
+        leftFront.configure(config, SparkBase.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 
     }
